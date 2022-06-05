@@ -4,17 +4,6 @@ const assessmentButton = document.getElementById('assessment');
 const resultDivided = document.getElementById('result-area');
 const tweetDivided = document.getElementById('tweet-area');
 
-/**
- * 指定した要素の子どもを全て除去する
- * @param {HTMLElement} element HTMLの要素
- */
-function removeAllChildren(element) {
-  while (element.firstChild) {
-    // 子どもの要素があるかぎり除去
-    element.removeChild(element.firstChild);
-  }
-}
-
 assessmentButton.onclick = () => {
   const userName = userNameInput.value;
   if (userName.length === 0) {
@@ -23,7 +12,7 @@ assessmentButton.onclick = () => {
   }
 
   // 診断結果表示エリアの作成
-  removeAllChildren(resultDivided);
+  resultDivided.innerText = '';
   const header = document.createElement('h3');
   header.innerText = '診断結果';
   resultDivided.appendChild(header);
@@ -34,14 +23,14 @@ assessmentButton.onclick = () => {
   resultDivided.appendChild(paragraph);
 
   // ツイートエリアの作成
-  removeAllChildren(tweetDivided);
+  tweetDivided.innerText = '';
   const anchor = document.createElement('a');
   const hrefValue =
     'https://twitter.com/intent/tweet?button_hashtag=' +
     encodeURIComponent('あなたのいいところ') +
     '&ref_src=twsrc%5Etfw';
   anchor.setAttribute('href', hrefValue);
-  anchor.className = 'twitter-hashtag-button';
+  anchor.setAttribute('class', 'twitter-hashtag-button');
   anchor.setAttribute('data-text', result);
   anchor.innerText = 'Tweet #あなたのいいところ';
   tweetDivided.appendChild(anchor);
@@ -73,18 +62,18 @@ const answers = [
 
 /**
  * 名前の文字列を渡すと診断結果を返す関数
- * @param {string} userName ユーザーの名前
+ * @param {string} userName ユーザの名前
  * @return {string} 診断結果
  */
 function assessment(userName) {
   // 全文字のコード番号を取得してそれを足し合わせる
-  let sumOfcharCode = 0;
+  let sumOfCharCode = 0;
   for (let i = 0; i < userName.length; i++) {
-    sumOfcharCode = sumOfcharCode + userName.charCodeAt(i);
+    sumOfCharCode = sumOfCharCode + userName.charCodeAt(i);
   }
 
   // 文字のコード番号の合計を回答の数で割って添字の数値を求める
-  const index = sumOfcharCode % answers.length;
+  const index = sumOfCharCode % answers.length;
   let result = answers[index];
 
   result = result.replaceAll('{userName}', userName);
